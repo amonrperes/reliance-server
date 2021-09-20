@@ -9,18 +9,14 @@ module.exports={
     logging.executionLog('createLeader');
 
     const {
+      id,
       organization,
       name,
       calling,
       email,
-      permissions
+      permissions,
+      date
     } = request.body;
-
-    const currentTime = new Date();
-    // const date = String(currentTime);
-    const date = 'jjjdjdd';
-
-    const id = 'exajjsjs';
 
     try{
       await connection('leaders').insert({
