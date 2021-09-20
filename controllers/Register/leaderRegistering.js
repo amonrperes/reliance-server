@@ -1,5 +1,4 @@
 const connection = require('../../database/connection');
-const crypto = require('crypto');
 const log = require('../../utils/Logging');
 
 const logging = new log();
@@ -40,6 +39,7 @@ module.exports={
   },
 
   async listAllLeaders(request, response){
+    logging.executionLog('createLeader');
     const leaders = await connection('leaders').select('*');
     return response.status(201).json(leaders);
   }
