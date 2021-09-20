@@ -30,8 +30,16 @@ module.exports={
 
       return response.status(201).json({
         status: 'ok',
-        leader_id: id,
-        message: 'Leader was successfully created'
+        message: 'Leader was successfully created',
+        date: date
+        leader:{
+          id: id,
+          name: name,
+          organization: organization,
+          calling: calling,
+          email: email,
+          permissions: permissions
+        }
       });
     } catch(err){
       console.log(err);
