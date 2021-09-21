@@ -5,7 +5,7 @@ const logging = new log();
 
 module.exports={
   async createLeader(request, response){
-    logging.executionLog('createLeader');
+    logging.middlewareLog('createLeader');
 
     const {
       id,
@@ -31,7 +31,7 @@ module.exports={
       return response.status(201).json({
         status: 'ok',
         message: 'Leader was successfully created',
-        date: date
+        date: date,
         leader:{
           id: id,
           name: name,
@@ -47,7 +47,7 @@ module.exports={
   },
 
   async listAllLeaders(request, response){
-    logging.executionLog('createLeader');
+    logging.middlewareLog('createLeader');
     const leaders = await connection('leaders').select('*');
     return response.status(201).json(leaders);
   }

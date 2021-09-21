@@ -1,8 +1,33 @@
+// require('dotenv/config').config();
+
+const DEFAULT_DB = 'realiance_sql'
 class Logging{
-  executionLog(func){
+  middlewareLog(func){
     const date = new Date();
 
-    const log = `${date} -> Executing '${func}' function.`
+    const log = `${date} - Executing '${func}' function.`
+    console.log(log);
+  }
+
+  databaseOperationLog(func, table, database){
+    if(!database) database = DEFAULT_DB;
+    const date = new Date();
+
+    const log = `${date} - ${func} on ${table} table at ${database}`;
+    console.log(log);
+  }
+
+  httpRequestStatus(func, status){
+    const date = new Date();
+
+    const log = `${date}/${func} -> ${status}`;
+    console.log(log);
+  }
+
+  generalOperation(func){
+    const date = new Date();
+
+    const log = `${date} - Executing '${func}'.`;
     console.log(log);
   }
 }
