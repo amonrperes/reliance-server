@@ -29,6 +29,13 @@ class Logging{
     const log = `${date} - Executing '${func}'.`;
     console.log(log);
   }
+
+  logErr(err, message){
+    const date = new Date();
+    
+    const log = `${date} - ERROR - '${err}' ${message}.`;
+    console.log(log);
+  }
 }
 
 module.exports = Logging;

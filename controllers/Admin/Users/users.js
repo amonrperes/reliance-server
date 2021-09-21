@@ -5,11 +5,13 @@ const connection = require('../../../database/connection');
 
 const CryptographyEngine = require('../../../utils/CryptographyEngine');
 const EmailSender = require('../../../utils/EmailSender');
+const EntitiesValidation = require('../../../utils/EntitiesValidation');
 const Logging = require('../../../utils/Logging');
 
 const logging = new Logging;
 const emailSender = new EmailSender;
 const cryptographyEngine = new CryptographyEngine;
+const entitiesValidation = new EntitiesValidation;
 
 module.exports = {
     async createUser(request, response){
@@ -26,10 +28,18 @@ module.exports = {
         const is_activated = 0;
         const updated = String(new Date());
 
+        if(!entitiesValidation.validateUser(request.body)){
+          return response.status(400).json({
+            status: 'Bad request',
+            message: `Data type was not correct.`
+          })
+        }
+
         const activation_token = cryptographyEngine.generateActivationToken(10);
     
         try{
           logging.databaseOperationLog('creating', 'rl_users');
+
           await connection('rl_users').insert({
             id,
             name,
@@ -65,25 +75,26 @@ module.exports = {
             }
           });
         } catch(err){
-          console.log(err);
+          return response.status(501).json({
+            status:'error',
+            message:`${err} - Something unexpected happened.`
+          });
         }
     },
-    async activateUser(request, response){
-        logging.middlewareLog('activateUser');
-        const { activation_token } = request.body;
-        const isActivated = 1;
-
+    async listUsers(request, response){
+        logging.middlewareLog('listUsers');
         try{
-            await connection('rl_users').update({
-                is_activated: isActivated
-            }).where('activation_token', '=', activation_token);
+            const users = await connection('rl_users').select('*');
 
             return response.status(201).json({
                 status: 'ok',
-                message: 'User activated.'
+                users: users
             });
         } catch(err){
-            console.log(err);
+            return response.status(501).json({
+              status:'error',
+              message:`${err} - Something unexpected happened.`
+            });
         }
     }
 }
