@@ -7,6 +7,8 @@ exports.up = function(knex) {
       table.string('calling').notNullable();
       table.string('email').notNullable();
       table.string('permissions').notNullable();
+      table.string('activation_token').notNullable();
+      table.integer('is_activated').notNullable();
       table.string('date').notNullable();
   })  
 };

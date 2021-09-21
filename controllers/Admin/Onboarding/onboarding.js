@@ -1,10 +1,14 @@
 const connection = require('../../../database/connection');
 
+const CryptographyEngine = require('../../../utils/CryptographyEngine');
 const EmailSender = require('../../../utils/EmailSender');
 const Logging = require('../../../utils/Logging');
 
+const DEFAULT_ACTIVATION_LENGTH = 10;
+
 const logging = new Logging;
 const emailSender = new EmailSender;
+const cryptographyEngine = new CryptographyEngine;
 
 module.exports = {
     async createUser(request, response){
@@ -19,6 +23,11 @@ module.exports = {
           permissions,
           date
         } = request.body;
+
+        const is_activated = 0;
+
+        logging.generalOperation('createActivationToken');
+        const activation_token = cryptographyEngine.createActivationToken(DEFAULT_ACTIVATION_LENGTH);
     
         try{
           logging.databaseOperationLog('creating', 'leaders');
@@ -29,26 +38,22 @@ module.exports = {
             calling,
             email,
             permissions,
+            activation_token,
+            is_activated,
             date
           });
 
           logging.generalOperation('emailSender');
-          let data = {
-              service: 'gmail',
-              auth: {
-                  user: 'amon.ribeiro.peres@gmail.com',
-                  pass: 'OlaMundo2020!'
-              },
-              recipient: email,
-              subject: 'Reliance Activation Code',
-              text: '234jjgwsJH76'
-          };
-          emailSender.sendEmail(data);
+          const auth = {
+            user: 'amon.ribeiro.peres@gmail.com',
+            pass: 'OlaMundo2020!'
+          }
+          
+          emailSender.sendEmail('smtp.gmail.com', auth, email, 'Reliance Activation Code', activation_token);
           
           logging.httpRequestStatus('createUser', 201);
           return response.status(201).json({
             status: 'ok',
-            message: 'Leader was successfully created',
             date: date,
             leader:{
               id: id,
@@ -56,11 +61,32 @@ module.exports = {
               organization: organization,
               calling: calling,
               email: email,
-              permissions: permissions
+              permissions: permissions,
+              activation_token: activation_token,
+              is_activated: is_activated,
+              date: date
             }
           });
         } catch(err){
           console.log(err);
         }
     },
+    async activateUser(request, response){
+        logging.middlewareLog('activateUser');
+        const { activationToken } = request.body;
+        const isActivated = 1;
+
+        try{
+            await connection('leaders').update({
+                is_activated: isActivated
+            }).where('activation_token', '=', activationToken);
+
+            return response.status(201).json({
+                status: 'ok',
+                message: 'User activated.'
+            });
+        } catch(err){
+            console.log(err);
+        }
+    }
 }

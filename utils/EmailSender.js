@@ -1,13 +1,16 @@
 const nodemailer = require('nodemailer');
 
 class EmailSender{
-    sendEmail({service, auth, recipient, subject, text}){
+    sendEmail(service, auth, recipient, subject, text){
         let transporter = nodemailer.createTransport({
-            service: service,
+            host: service,
+            port: 587,
+            secure: false,
+            requireTLS: true,
             auth: {
                 user: auth.user,
-                pass: auth.password
-            }     
+                pass: auth.pass
+            }    
         });
 
         let sender = auth.user;
