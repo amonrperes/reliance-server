@@ -2,7 +2,7 @@ const express = require('express');
 
 const healthCheck = require('../../controllers/HealthCheck/index');
 const leaderRegistering = require('../../controllers/Register/leaderRegistering');
-const onboarding = require('../../controllers/Admin/Onboarding/onboarding');
+const onboarding = require('../../controllers/Admin/Users/onboarding');
 
 const routes = express.Router();
 
@@ -10,7 +10,7 @@ routes.get('/health_check/check_server_availability', healthCheck.checkServerAva
 routes.get('/health_check/organizations', healthCheck.getOrganizations);
 routes.get('/registering/list_leaders', leaderRegistering.listAllLeaders);
 
-routes.post('/registering/leader', leaderRegistering.createLeader);
 routes.post('/onboarding', onboarding.createUser);
+routes.post('/onboarding/activate', onboarding.activateUser);
 
 module.exports = routes;

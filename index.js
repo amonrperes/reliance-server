@@ -1,3 +1,6 @@
+require('dotenv/config');
+const configDefaults = process.env;
+
 const express = require('express');
 const cors = require('cors');
 
@@ -9,4 +12,4 @@ app.use(cors());
 app.use(express.json());
 app.use(routes);
 
-app.listen(3333, () => console.log("Starting module 'server' running at: http://localhost:8081"));
+app.listen(configDefaults.DEFAULT_PORT, () => console.log(configDefaults.DEFAULT_SERVER_STARTING_MESSAGE));

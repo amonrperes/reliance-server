@@ -1,6 +1,5 @@
-// require('dotenv/config').config();
-
-const DEFAULT_DB = 'realiance_sql'
+require('dotenv/config');
+const configDefaults = process.env;
 class Logging{
   middlewareLog(func){
     const date = new Date();
@@ -10,7 +9,7 @@ class Logging{
   }
 
   databaseOperationLog(func, table, database){
-    if(!database) database = DEFAULT_DB;
+    if(!database) database = configDefaults.DEFAULT_DATABASE;
     const date = new Date();
 
     const log = `${date} - ${func} on ${table} table at ${database}`;
