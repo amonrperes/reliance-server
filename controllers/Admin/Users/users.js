@@ -16,56 +16,52 @@ module.exports = {
         logging.middlewareLog('createUser');
     
         const {
-          id,
           organization,
           name,
           calling,
           email,
-          permissions,
-          date
+          permission
         } = request.body;
-
+        const id = cryptographyEngine.generateUserId(5);
         const is_activated = 0;
+        const updated = String(new Date());
 
-        logging.generalOperation('createActivationToken');
-        const activation_token = cryptographyEngine.createActivationToken(10);
+        const activation_token = cryptographyEngine.generateActivationToken(10);
     
         try{
-          logging.databaseOperationLog('creating', 'leaders');
-          await connection('leaders').insert({
+          logging.databaseOperationLog('creating', 'rl_users');
+          await connection('rl_users').insert({
             id,
-            organization,
             name,
-            calling,
             email,
-            permissions,
+            organization,
+            calling,
+            permission,
             activation_token,
             is_activated,
-            date
+            updated
           });
 
-          logging.generalOperation('emailSender');
           const auth = {
-            user: 'amon.ribeiro.peres@gmail.com',
-            pass: 'OlaMundo2020!'
+            user: configDefaults.RELIANCE_EMAIL,
+            pass: configDefaults.REALIANCE_PASSWORD
           }
           
-          emailSender.sendEmail('smtp.gmail.com', auth, email, 'Reliance Activation Code', activation_token);
+          emailSender.sendEmail(configDefaults.EMAIL_SERVICE, auth, email, activation_token);
           
           logging.httpRequestStatus('createUser', 201);
           return response.status(201).json({
             status: 'ok',
-            date: date,
+            updated: updated,
             leader:{
               id: id,
               name: name,
               organization: organization,
               calling: calling,
               email: email,
-              permissions: permissions,
+              permission: permission,
               activation_token: activation_token,
               is_activated: is_activated,
-              date: date
             }
           });
         } catch(err){
@@ -78,7 +74,7 @@ module.exports = {
         const isActivated = 1;
 
         try{
-            await connection('leaders').update({
+            await connection('rl_users').update({
                 is_activated: isActivated
             }).where('activation_token', '=', activation_token);
 
