@@ -32,7 +32,7 @@ module.exports = {
           return response.status(400).json({
             status: 'Bad request',
             message: `Data type was not correct.`
-          })
+          });
         }
 
         const activation_token = cryptographyEngine.generateActivationToken(10);
