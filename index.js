@@ -12,4 +12,4 @@ app.use(cors());
 app.use(express.json());
 app.use(routes);
 
-app.listen(configDefaults.DEFAULT_PORT, () => console.log(configDefaults.DEFAULT_SERVER_STARTING_MESSAGE));
+app.listen(configDefaults.PORT, () => console.log(configDefaults.DEFAULT_SERVER_STARTING_MESSAGE));
