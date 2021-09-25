@@ -24,7 +24,7 @@ module.exports = {
           email,
           permission
         } = request.body;
-        const id = cryptographyEngine.generateUserId(5);
+        const id = cryptographyEngine.generateUserId(parseInt(configDefaults.DEFAULT_USER_ID_LENGTH));
         const is_activated = 0;
         const updated = String(new Date());
 
@@ -35,7 +35,7 @@ module.exports = {
           });
         }
 
-        const activation_token = cryptographyEngine.generateActivationToken(10);
+        const activation_token = cryptographyEngine.generateActivationToken(parseInt(configDefaults.DEFAULT_ACTIVATION_TOKEN_LENGTH));
     
         try{
           logging.databaseOperationLog('creating', 'rl_users');

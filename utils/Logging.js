@@ -34,7 +34,7 @@ class Logging{
     const date = new Date();
     
     const log = `${date} - ERROR - '${err}' ${message}.`;
-    console.log(log);
+    console.error(log);
   }
 }
 

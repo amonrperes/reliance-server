@@ -10,7 +10,7 @@ const ConfigDefaults = new configDefaults();
 module.exports = {
   checkServerAvaibility(require, response){
     const FUNCTION_NAME = 'checkServerAvaibility';
-    logging.executionLog(FUNCTION_NAME);
+    // logging.executionLog(FUNCTION_NAME);
     return response.status(201).json({
       server_status: "online"
     })
