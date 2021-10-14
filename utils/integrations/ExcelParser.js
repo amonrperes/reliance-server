@@ -4,7 +4,7 @@ const pythonExcelParser = '../external_scripts/test.py'
 function ExcelParser(params){
   let dataToSend;
 
-  const parser = spawn('python', [pythonExcelParser]);
+  const parser = spawn('python', [pythonExcelParser, params]);
 
   parser.stdout.on('data', function (data) {
     console.log('Pipe data from python script ...');
