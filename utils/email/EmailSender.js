@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-const Logging = require('./Logging');
+const Logging = require('../log/Logging');
 
 const logging = new Logging;
 class EmailSender{
